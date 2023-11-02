@@ -7,7 +7,7 @@ Description.
 Please download a pretrained motionBERT file from [HERE](https://onedrive.live.com/?authkey=%21ABOq3JHlmyCLz9k&id=A5438CD242871DF0%21170&cid=A5438CD242871DF0). Please rename the file as `MB_best_epoch.bin` and place it into `models/pt`.
 
 ### 2D/3D Pose Estimation from Image
-```
+```python
 import os
 import numpy as np
 import torch
@@ -60,7 +60,7 @@ with torch.no_grad():
 ```
 
 ### Ergonomic Risk Assessment (REBA/OWAS)
-```
+```python
 from ergonomics.reba import RebaScore
 from ergonomics.owas import OwasScore
 from data.utils import h36m2rcoco
