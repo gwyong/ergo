@@ -1,6 +1,6 @@
 # ERGO
 
-Description.
+This repository aims to provide innovative tools leveraging the power of computer vision to suuport ergonomics in the workplace. By using advanced algorithms, our repository analyzes postures and work environments to provide actionalbe insights for improving workplace ergonomics.
 
 ## Getting Started
 
