@@ -2,9 +2,13 @@
 
 Description.
 
-## Usage
+## Getting Started
 
-Please download a pretrained motionBERT file from [HERE](https://onedrive.live.com/?authkey=%21ABOq3JHlmyCLz9k&id=A5438CD242871DF0%21170&cid=A5438CD242871DF0). Please rename the file as `MB_best_epoch.bin` and place it into `models/pt`.
+Please download a pretrained motionBERT file from [HERE](https://onedrive.live.com/?authkey=%21ABOq3JHlmyCLz9k&id=A5438CD242871DF0%21170&cid=A5438CD242871DF0). Please rename the file as `MB_best_epoch.bin` and place it into `models/pt`.  
+```
+git clone https://github.com/gwyong/ergo.git
+pip install -r requirements.txt
+```
 
 ### 2D/3D Pose Estimation from Image
 ```python
@@ -91,10 +95,14 @@ print("Owas Score:", owas_score)
 print("Trunk, Arms, Legs, Load :", partial_score)
 ```
 
-## Contributors
+## License
+- Academic purpose only.
+
+## Acknowledgements
 
 - [Gunwoo Yong](https://github.com/gwyong)
 - [Leyang Wen](https://github.com/LeyangWen)
+- [Francis Baek](https://www.linkedin.com/in/francis-baek-58789b233/)
 
 ## Base Repositories
 
