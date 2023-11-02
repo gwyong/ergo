@@ -1,0 +1,3 @@
+[submodule "ergonomics"]
+	path = ergonomics
+	url = https://github.com/rs9000/ergonomics
