@@ -65,27 +65,63 @@ with torch.no_grad():
 
 ### Ergonomic Risk Assessment (REBA/OWAS)
 ```python
+import pandas as pd
 from ergonomics.reba import RebaScore
 from ergonomics.owas import OwasScore
 from data.utils import h36m2rcoco
 
 # predicted_3d = np.load("../output/3D_pose_worker.npy")
 pose = np.squeeze(h36m2rcoco(predicted_3d))
-rebaScore = RebaScore()
-REBA_body_params = rebaScore.get_body_angles_from_pose_right(pose)
-REBA_arms_params = rebaScore.get_arms_angles_from_pose_right(pose)
-rebaScore.set_body(REBA_body_params)
-score_a, partial_a = rebaScore.compute_score_a()
+right_rebaScore = RebaScore()
+left_rebaScore = RebaScore()
 
-rebaScore.set_arms(REBA_arms_params)
-score_b, partial_b = rebaScore.compute_score_b()
+right_REBA_body_params = right_rebaScore.get_body_angles_from_pose_right(pose)
+right_REBA_arms_params = right_rebaScore.get_arms_angles_from_pose_right(pose)
 
-score_c, caption = rebaScore.compute_score_c(score_a, score_b)
+left_REBA_body_params = left_rebaScore.get_body_angles_from_pose_left(pose)
+left_REBA_arms_params = left_rebaScore.get_arms_angles_from_pose_left(pose)
 
-print("Score A: ", score_a, "Partial: ", partial_a)
-print("Score B: ", score_b, "Partial: ", partial_b)
-print("Score C: ", score_c, caption)
+right_rebaScore.set_body(right_REBA_body_params)
+left_rebaScore.set_body(left_REBA_body_params)
+right_score_a, right_partial_a = right_rebaScore.compute_score_a()
+left_score_a, left_partial_a = left_rebaScore.compute_score_a()
 
+right_rebaScore.set_arms(right_REBA_arms_params)
+left_rebaScore.set_arms(left_REBA_arms_params)
+
+right_score_b, right_partial_b = right_rebaScore.compute_score_b()
+left_score_b, left_partial_b = left_rebaScore.compute_score_b()
+
+right_score_c, right_caption = right_rebaScore.compute_score_c(right_score_a, right_score_b)
+left_score_c, left_caption = left_rebaScore.compute_score_c(left_score_a, left_score_b)
+
+REBA_summary = {
+    "Right Score A": [right_score_a],
+    "Right Score B": [right_score_b],
+    "Right Score C": [right_score_c],
+    "Left Score A" : [left_score_a],
+    "Left Score B" : [left_score_b],
+    "Left Score C" : [left_score_c],
+    "Right Score A (Neck)": [right_partial_a[0]],
+    "Right Score A (Trunk)": [right_partial_a[1]],
+    "Right Score A (R Leg)": [right_partial_a[2]],
+    "Right Score B (R UpperArm)": [right_partial_b[0]],
+    "Right Score B (R LowerArm)": [right_partial_b[1]],
+    "Right Score B (R Wrist)": [right_partial_b[2]],
+    "Left Score A (Neck)": [left_partial_a[0]],
+    "Left Score A (Trunk)": [left_partial_a[1]],
+    "Left Score A (L Leg)": [left_partial_a[2]],
+    "Left Score B (L UpperArm)": [left_partial_b[0]],
+    "Left Score B (L LowerArm)": [left_partial_b[1]],
+    "Left Score B (L Wrist)": [left_partial_b[2]],
+}
+REBA_table = pd.DataFrame(REBA_summary).T.rename(columns={0:""})
+
+print("="*10+"REBA Result"+"="*10)
+print(right_caption) if right_score_c > left_score_c else print(left_caption)
+print(REBA_table)
+
+print("\n"+"="*10+"OWAS Result"+"="*10)
 owasScore = OwasScore()
 OWAS_body_params = owasScore.get_param_from_pose(pose, verbose=False)
 owasScore.set_body_params(OWAS_body_params)
